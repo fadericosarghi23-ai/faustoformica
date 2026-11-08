@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://architettofaustoformica.it/sitemap-index.xml

@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectList from "../components/ProjectList.astro";
+import { architetturaUrbanistica } from "../data/projects";
+---
+<Base
+  title="Architettura e Urbanistica | Treviglio | Architetto Fausto Formica"
+  description="Progettazione architettonica e urbanistica, direzione lavori: residenze, fabbricati commerciali e piani di recupero. Architetto Fausto Formica, Treviglio."
+>
+  <ProjectList
+    eyebrow="progettazione e direzione lavori"
+    heading="Architettura e urbanistica"
+    quote="bisogna pensare al progetto considerando il suo contesto: una sedia in una stanza, una stanza in una casa, una casa nell'ambiente, l'ambiente nel progetto di una città"
+    author="Eliel Saarinen"
+    items={architetturaUrbanistica}
+  />
+</Base>

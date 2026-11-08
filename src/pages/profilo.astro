@@ -1,0 +1,85 @@
+---
+import Base from "../layouts/Base.astro";
+
+const esperienza = [
+  { periodo: "1994 — 1998", testo: "collaboratore di diversi studi di architettura per la predisposizione di pratiche edilizie e lo sviluppo della modellazione 3D" },
+  { periodo: "1998 — 2000", testo: "interior & industrial designer presso proprio studio tecnico" },
+  { periodo: "2000 — 2007", testo: "progettista presso la società di professionisti \"Archimede S.r.l.\"" },
+  { periodo: "dal 2007", testo: "libero professionista presso proprio studio di architettura, urbanistica e disegno industriale" },
+  { periodo: "2008 — 2019", testo: "cofondatore e amministratore unico della società \"Edil System S.r.l.\"" },
+  { periodo: "2009", testo: "project manager presso la società \"Le Ore RS\" a Chisinau" },
+];
+const formazione = [
+  { periodo: "1992", testo: "diploma scientifico presso il liceo \"G. Marconi\" di Milano" },
+  { periodo: "2006", testo: "laurea in architettura presso il \"Politecnico\" di Milano; abilitazione alla professione di Architetto" },
+  { periodo: "2007", testo: "iscrizione all'Ordine degli Architetti di Bergamo col n. 2345" },
+  { periodo: "2012", testo: "abilitazione a certificatore energetico ai sensi del D.G.R. n. VIII/5018 e s.m.i." },
+  { periodo: "2013", testo: "accreditamento all'elenco dei soggetti certificatori in Regione Lombardia col n. 21513" },
+];
+const bio = [
+  "Laureato al Politecnico di Milano e iscritto all'Ordine degli Architetti P.P.C. della provincia di Bergamo col n. 2345, inizia la carriera lavorativa nel 1994 collaborando con i principali studi di architettura della zona.",
+  "Nel 1998 apre un proprio studio tecnico di progettazione acquisendo ampia esperienza, dapprima in ambito edilizio — interni e ristrutturazioni — e successivamente nell'industrial design.",
+  "Dal 2000 allarga il bagaglio di conoscenze anche alla progettazione residenziale ed urbanistica, con particolare attenzione alle nuove tecniche e ai nuovi sistemi progettuali.",
+  "Nel 2007 fonda uno studio associato per offrire un servizio capace di rispondere a esigenze sempre più specifiche, sviluppando anche esperienza internazionale come project manager.",
+  "Nel 2008 dà vita a una società in grado di seguire direttamente l'intero processo: dallo studio preliminare di fattibilità a tutte le fasi dell'appalto, fino alla gestione del cantiere e alla consegna.",
+  "Nel 2012 si abilita come certificatore energetico. Dal 2016 sviluppa la progettazione di uffici e spazi di lavoro, dove lo studio di materiali, cromatismi e il comfort degli spazi sono alla base del progetto.",
+];
+---
+<Base
+  title="Profilo | Treviglio | Architetto Fausto Formica"
+  description="Formazione ed esperienze dell'Architetto Fausto Formica: dal Politecnico di Milano alla progettazione di architettura, interni e design industriale."
+>
+  <section class="p-hero wrap">
+    <div class="p-portrait" data-reveal><img src="/images/profilo.png" alt="Architetto Fausto Formica" /></div>
+    <div class="p-intro">
+      <p class="t-eyebrow" data-reveal>Profilo</p>
+      <h1 class="t-h1" data-reveal>Formazione ed esperienze</h1>
+      <blockquote class="p-quote" data-reveal>
+        <span>«i due giorni più importanti della vita sono quello in cui sei nato e quello in cui capisci perché»</span>
+        <cite>Mark Twain</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="p-bio wrap wrap-narrow" data-reveal-group>
+    {bio.map((t) => <p class="p-par" data-reveal>{t}</p>)}
+  </section>
+
+  <section class="p-timelines wrap">
+    <div class="tl" data-reveal-group>
+      <h2 class="t-eyebrow" data-reveal>Esperienza lavorativa</h2>
+      <ul>{esperienza.map((e) => (<li data-reveal><span class="tl-p">{e.periodo}</span><span class="tl-t">{e.testo}</span></li>))}</ul>
+    </div>
+    <div class="tl" data-reveal-group>
+      <h2 class="t-eyebrow" data-reveal>Istruzione e formazione</h2>
+      <ul>{formazione.map((e) => (<li data-reveal><span class="tl-p">{e.periodo}</span><span class="tl-t">{e.testo}</span></li>))}</ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .p-hero { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px,5vw,72px); align-items: center; padding-top: clamp(50px,7vw,90px); }
+  .p-portrait { aspect-ratio: 4 / 5; overflow: hidden; background: var(--color-surface); }
+  .p-portrait img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+  .p-intro .t-h1 { margin: 10px 0 24px; }
+  .p-quote { display: flex; flex-direction: column; gap: 8px; }
+  .p-quote span { font-size: 1.15rem; font-style: italic; color: var(--color-ink); line-height: 1.5; }
+  .p-quote cite { font-size: 0.8rem; color: var(--color-faint); font-style: normal; }
+
+  .p-bio { padding-top: clamp(50px,8vw,100px); }
+  .p-par { font-size: 1.05rem; color: var(--color-muted); line-height: 1.75; margin: 0 0 20px; }
+
+  .p-timelines { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,6vw,80px); padding-top: clamp(50px,7vw,90px); }
+  .tl h2 { margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--color-line); }
+  .tl ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+  .tl li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; }
+  .tl-p { font-size: 0.8rem; letter-spacing: 0.04em; color: var(--color-accent); }
+  .tl-t { font-size: 0.95rem; color: var(--color-muted); line-height: 1.6; }
+
+  @media (max-width: 820px) {
+    .p-hero { grid-template-columns: 1fr; }
+    .p-portrait { max-width: 380px; }
+    .p-timelines { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) { .tl li { grid-template-columns: 1fr; gap: 4px; } }
+</style>

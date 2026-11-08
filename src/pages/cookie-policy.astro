@@ -1,0 +1,58 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../config/site";
+---
+<Base title="Cookie Policy | Architetto Fausto Formica" description="Informativa sull'uso dei cookie del sito.">
+  <article class="legal wrap wrap-narrow" data-reveal-group>
+    <h1 data-reveal>Cookie Policy</h1>
+    <p class="legal-intro" data-reveal>
+      I cookie sono file memorizzati sul dispositivo dell'utente durante la navigazione sul Sito.
+      Consentono di memorizzare azioni e preferenze (login, lingua, impostazioni di visualizzazione)
+      ed evitano di doverle reinserire a ogni visita.
+    </p>
+
+    <h2 data-reveal>Cookie tecnici</h2>
+    <p data-reveal>
+      Indispensabili per il corretto funzionamento del Sito, non richiedono il consenso preventivo
+      dell'utente. Comprendono i cookie di navigazione o di sessione necessari all'autenticazione e
+      i cookie di funzionalità (es. memorizzazione della lingua).
+    </p>
+
+    <h2 data-reveal>Cookie analitici e di profilazione</h2>
+    <p data-reveal>
+      Possono servire a raccogliere informazioni, anche in forma aggregata, sul numero di utenti e
+      sulle modalità di navigazione, oppure a elaborare il profilo dell'utente per finalità
+      pubblicitarie. Per questa tipologia è richiesto il consenso.
+    </p>
+
+    <h2 data-reveal>Cookie di terze parti</h2>
+    <p data-reveal>
+      Il Sito può ospitare cookie di soggetti terzi, titolari autonomi del relativo trattamento.
+      Le informative dei principali fornitori sono disponibili ai rispettivi link: Google, Google
+      Ads, Facebook, YouTube, Instagram, X e LinkedIn.
+    </p>
+
+    <h2 data-reveal>Gestione del consenso</h2>
+    <p data-reveal>
+      È possibile bloccare, cancellare o modificare le impostazioni relative ai cookie tramite le
+      funzioni del browser o il pannello di gestione del consenso. La disattivazione dei cookie
+      tecnici può comprometterne il corretto funzionamento del Sito.
+    </p>
+
+    <p class="legal-note" data-reveal>
+      Testo di sintesi ricostruito dall'informativa del sito originale: integrare con la tabella
+      aggiornata dei cookie effettivamente installati e far verificare da un consulente prima della
+      pubblicazione. Contatti: <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+  </article>
+</Base>
+
+<style>
+  .legal { padding-top: 70px; max-width: 760px; }
+  .legal h1 { font-size: var(--text-section); font-weight: 300; margin: 0 0 24px; }
+  .legal h2 { font-size: var(--text-sub); font-weight: 400; margin: 36px 0 12px; }
+  .legal p { font-size: var(--text-body); color: var(--color-muted); line-height: 1.7; margin: 0 0 14px; }
+  .legal a { color: var(--color-accent); }
+  .legal-intro { color: var(--color-ink); }
+  .legal-note { margin-top: 40px; font-size: var(--text-caption); color: var(--color-faint); font-style: italic; }
+</style>
