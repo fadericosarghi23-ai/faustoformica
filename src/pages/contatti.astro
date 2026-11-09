@@ -1,107 +1,42 @@
 ---
-import Base from "../layouts/Base.astro";
-import { site } from "../config/site";
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
 ---
-<Base
-  title="Contatti | Treviglio | Architetto Fausto Formica"
-  description="Contatta lo studio dell'Architetto Fausto Formica a Treviglio: indirizzo, telefono, e-mail e orari di ufficio."
->
-  <section class="c-hero wrap">
-    <p class="t-eyebrow" data-reveal>Contatti</p>
-    <h1 class="t-display" data-reveal>Parliamo<br />del progetto.</h1>
-    <blockquote class="c-quote" data-reveal>
-      <span>«perdersi è stare sempre nello stesso luogo»</span>
-      <cite>Miguel Ángel Arcas</cite>
-    </blockquote>
-  </section>
+<Layout title="Contatti | Architetto Fausto Formica" description="Indirizzo, telefono ed e-mail dello studio dell’architetto Fausto Formica a Treviglio (BG)." path="/contatti/">
+  <div class="container page-head center">
+    <h1>Contatti</h1>
+    <p class="muted mt-2">Indirizzo, telefono, e-mail</p>
+  </div>
 
-  <section class="c-main wrap">
-    <div class="c-info" data-reveal-group>
-      <div class="c-block" data-reveal>
-        <h2 class="t-eyebrow">Indirizzo</h2>
-        <p>{site.addressStudio}</p>
-        <p>{site.addressCoworking}</p>
-      </div>
-      <div class="c-block" data-reveal>
-        <h2 class="t-eyebrow">Telefono</h2>
-        <p><a href={`tel:${site.phonePrimary.replace(/\s/g,"")}`}>{site.phonePrimary}</a></p>
-        <p><a href={`tel:${site.phoneSecondary.replace(/\s/g,"")}`}>{site.phoneSecondary}</a></p>
-      </div>
-      <div class="c-block" data-reveal>
-        <h2 class="t-eyebrow">E-mail</h2>
-        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
-      </div>
-      <div class="c-block" data-reveal>
-        <h2 class="t-eyebrow">Orari ufficio</h2>
-        <ul class="c-orari">
-          {site.orari.map((o) => (<li><span>{o.giorno}</span>{o.ore}</li>))}
-        </ul>
-      </div>
+  <div class="container contact-info">
+    <div>
+      <p class="eyebrow">Indirizzo</p>
+      <p>{site.address.street}</p>
+      <p class="muted">{site.address.street2}</p>
+      <p>{site.address.postalCode} {site.address.locality} ({site.address.region})</p>
+      <p class="mt-2"><a href={site.maps} target="_blank" rel="noopener">Apri in Google Maps →</a></p>
     </div>
 
-    <form class="c-form" data-reveal novalidate aria-describedby="form-note">
-      <p id="form-note" class="form-note">Form dimostrativo: non è ancora collegato a un endpoint di invio.</p>
-      <div class="field"><label for="f-name">Nome</label><input id="f-name" name="nome" type="text" autocomplete="name" /></div>
-      <div class="field"><label for="f-email">E-mail</label><input id="f-email" name="email" type="email" autocomplete="email" /></div>
-      <div class="field"><label for="f-subject">Oggetto</label><input id="f-subject" name="oggetto" type="text" /></div>
-      <div class="field"><label for="f-msg">Messaggio</label><textarea id="f-msg" name="messaggio" rows="5"></textarea></div>
-      <button type="submit" class="btn">Invia</button>
-      <p class="form-status" role="status" aria-live="polite"></p>
-    </form>
-  </section>
-
-  <section class="c-map wrap">
-    <div class="map-ph" data-reveal role="img" aria-label="Mappa dello studio">
-      <span>Mappa — inserire l'embed di Google Maps dello studio di {site.city}</span>
+    <div class="mt-4">
+      <p class="eyebrow">Telefono</p>
+      {site.phones.map((t) => (
+        <p><a href={`tel:${t.replace(/\s+/g, '')}`}>{t}</a></p>
+      ))}
     </div>
-  </section>
-</Base>
 
-<style>
-  .c-hero { padding-top: clamp(50px,7vw,100px); }
-  .c-hero .t-display { margin: 18px 0 30px; }
-  .c-quote { display: flex; flex-direction: column; gap: 6px; }
-  .c-quote span { font-size: 1.1rem; font-style: italic; color: var(--color-muted); }
-  .c-quote cite { font-size: 0.8rem; color: var(--color-faint); font-style: normal; }
+    <div class="mt-4">
+      <p class="eyebrow">E-mail</p>
+      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
 
-  .c-main { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,6vw,90px); padding-top: clamp(50px,7vw,90px); align-items: start; }
-  .c-info { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 28px; }
-  .c-block h2 { margin-bottom: 12px; }
-  .c-block p { font-size: 1rem; color: var(--color-ink); margin: 0 0 4px; }
-  .c-block a { color: var(--color-ink); transition: color 0.2s; }
-  .c-block a:hover { color: var(--color-accent); }
-  .c-orari { list-style: none; margin: 0; padding: 0; }
-  .c-orari li { display: flex; justify-content: space-between; gap: 10px; color: var(--color-muted); padding: 3px 0; font-size: 0.92rem; }
-  .c-orari span { color: var(--color-ink); text-transform: capitalize; }
+    <div class="mt-4">
+      <p class="eyebrow">Orari ufficio</p>
+      <p>{site.hours}</p>
+    </div>
 
-  .c-form { display: grid; gap: 18px; }
-  .form-note { font-size: 0.8rem; color: var(--color-accent); background: var(--color-surface); border-left: 2px solid var(--color-accent); padding: 12px 16px; margin: 0; }
-  .field { display: grid; gap: 7px; }
-  .field label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-faint); }
-  .field input, .field textarea {
-    font: inherit; font-size: 1rem; color: var(--color-ink); background: transparent;
-    border: 0; border-bottom: 1px solid var(--color-line); padding: 10px 0; transition: border-color 0.25s; width: 100%;
-  }
-  .field input:focus, .field textarea:focus { outline: none; border-color: var(--color-ink); }
-  .c-form .btn { justify-self: start; margin-top: 6px; }
-  .form-status { font-size: 0.82rem; color: var(--color-muted); margin: 0; min-height: 1.2em; }
-
-  .c-map { padding-top: clamp(50px,7vw,90px); }
-  .map-ph {
-    height: 380px; display: grid; place-items: center; text-align: center; padding: 20px; color: var(--color-faint); font-size: 0.85rem;
-    background: repeating-linear-gradient(45deg, #efeeea, #efeeea 14px, #e8e6e1 14px, #e8e6e1 28px); border: 1px solid var(--color-line);
-  }
-  .map-ph span { max-width: 420px; }
-
-  @media (max-width: 820px) { .c-main { grid-template-columns: 1fr; } }
-  @media (max-width: 440px) { .c-info { grid-template-columns: 1fr; } }
-</style>
-
-<script>
-  const form = document.querySelector<HTMLFormElement>(".c-form");
-  const status = form?.querySelector<HTMLElement>(".form-status");
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (status) status.textContent = "Il form non è ancora collegato a un endpoint di invio.";
-  });
-</script>
+    <div class="mt-4">
+      <p class="eyebrow">Altro</p>
+      <p><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>
+  </div>
+</Layout>

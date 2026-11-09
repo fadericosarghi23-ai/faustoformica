@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects, categories, years } from '../../data/projects';
+import { projectCover } from '../../lib/images';
+
+function titleCase(s: string) {
+  return s.split(' ').map((w) => (w.length > 2 ? w.charAt(0).toUpperCase() + w.slice(1) : w)).join(' ');
+}
+// Ordina per anno discendente, poi per titolo.
+const ordered = [...projects].sort((a, b) => (b.year.localeCompare(a.year)) || a.title.localeCompare(b.title));
+---
+<Layout title="Progetti | Architetto Fausto Formica" description="Tutti i progetti dello studio: architettura e urbanistica, design di interni e design industriale, tra Treviglio e la Lombardia." path="/progetti/">
+  <div class="container projects-wrap">
+    <div class="projects-layout reveal">
+      <aside class="projects-side">
+        <h1 class="works-h1">Progetti</h1>
+        <div class="works-filter" data-group="cat" role="group" aria-label="Filtra per categoria">
+          <span class="filter-label">Categoria</span>
+          <div class="chips">
+            <button type="button" class="chip is-active" data-filter="all" aria-pressed="true">Tutte</button>
+            {categories.map((c) => (
+              <button type="button" class="chip" data-filter={c} aria-pressed="false">{c}</button>
+            ))}
+          </div>
+        </div>
+        <div class="works-filter" data-group="year" role="group" aria-label="Filtra per anno">
+          <span class="filter-label">Anno</span>
+          <div class="chips">
+            <button type="button" class="chip is-active" data-filter="all" aria-pressed="true">Tutti</button>
+            {years.map((y) => (
+              <button type="button" class="chip" data-filter={y} aria-pressed="false">{y}</button>
+            ))}
+          </div>
+        </div>
+        <div class="proj-preview" aria-hidden="true">
+          <img alt="" decoding="async" />
+          <span class="pp-name"></span>
+        </div>
+      </aside>
+
+      <div class="works-main">
+        <ul class="works-index" id="works-index">
+          {ordered.map((p) => {
+            const cover = projectCover(p.slug);
+            return (
+              <li class="wi-item" data-cat={p.category} data-years={p.year} data-img={cover?.src} data-title={p.title}>
+                <a class="wi wi-link" href={`/progetti/${p.slug}/`}>
+                  <span class="wi-title">{p.title}</span>
+                  <span class="wi-meta">{titleCase(p.descriptor)} · {p.year}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <p class="works-empty" hidden>Nessun progetto corrisponde ai filtri.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import '../../scripts/projects-preview.js';
+    import '../../scripts/projects-filter.js';
+  </script>
+</Layout>

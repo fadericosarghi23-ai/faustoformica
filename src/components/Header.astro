@@ -1,110 +1,19 @@
 ---
-import { site, nav } from "../config/site";
-const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : href !== "#" && path.startsWith(href);
+import { site, navItems } from '../data/site';
+interface Props { path?: string; }
+const { path = '' } = Astro.props;
 ---
-<header class="site-header" id="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="/" aria-label={site.name}>
-      <img class="brand-mark" src="/images/logo.png" alt="" width="40" height="40" />
-      <span class="brand-name">
-        <span class="bn-top">{site.wordmarkTop}</span>
-        <span class="bn-bottom">{site.wordmarkBottom}</span>
-      </span>
-    </a>
-
-    <nav class="main-nav" aria-label="Navigazione principale">
-      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Menu">
-        <span></span><span></span>
-      </button>
-      <ul id="nav-list" class="nav-list">
-        {nav.map((item) =>
-          item.children ? (
-            <li class="has-sub">
-              <a href={item.href} class:list={["nav-link", { active: isActive("/design") || path.includes("design") || path.includes("architettura") }]} aria-haspopup="true">{item.label}</a>
-              <ul class="submenu">
-                {item.children.map((c) => (
-                  <li><a href={c.href} class:list={["sub-link", { active: isActive(c.href) }]}>{c.label}</a></li>
-                ))}
-              </ul>
-            </li>
-          ) : (
-            <li><a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>{item.label}</a></li>
-          )
-        )}
-      </ul>
+<header class="site-header is-solid" data-transparent="false">
+  <div class="container nav-row">
+    <div class="nav-head">
+      <a class="brand" href="/" aria-label={`${site.name} — architetto, home`}>
+        <span class="brand-mark">{site.brandLead} <strong>{site.brandStrong}</strong></span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Principale">
+      {navItems.map((i) => (
+        <a class="link-underline" href={i.href} aria-current={path.startsWith(i.href) ? 'page' : undefined}>{i.label}</a>
+      ))}
     </nav>
   </div>
 </header>
-
-<style>
-  .site-header {
-    position: sticky; top: 0; z-index: 50;
-    background: var(--color-paper);
-    border-bottom: 1px solid var(--color-line);
-  }
-  .header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-
-  .brand { display: flex; align-items: center; gap: 14px; }
-  .brand-mark { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-  .brand-name { display: flex; flex-direction: column; line-height: 1.02; }
-  .bn-top { font-size: 1rem; letter-spacing: 0.02em; color: var(--color-muted); }
-  .bn-bottom { font-size: 1.15rem; letter-spacing: 0.01em; color: var(--color-ink); }
-
-  .nav-list { display: flex; align-items: center; gap: 34px; list-style: none; margin: 0; padding: 0; }
-  .nav-link {
-    position: relative; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em;
-    color: var(--color-muted); padding: 8px 0; transition: color 0.25s ease;
-  }
-  .nav-link:hover, .nav-link.active { color: var(--color-ink); }
-  .nav-link::after {
-    content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 0; background: var(--color-accent); transition: width 0.3s ease;
-  }
-  .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-
-  .has-sub { position: relative; }
-  .submenu {
-    position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(8px);
-    min-width: 230px; list-style: none; margin: 0; padding: 10px 0; background: var(--color-paper);
-    border: 1px solid var(--color-line); box-shadow: 0 16px 40px rgba(0,0,0,0.08);
-    opacity: 0; visibility: hidden; transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-  }
-  .has-sub:hover .submenu, .has-sub:focus-within .submenu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-  .sub-link {
-    display: block; padding: 10px 22px; font-size: 0.8rem; letter-spacing: 0.04em; color: var(--color-muted);
-    transition: background 0.2s, color 0.2s;
-  }
-  .sub-link:hover, .sub-link.active { background: var(--color-surface); color: var(--color-ink); }
-
-  .nav-toggle { display: none; flex-direction: column; gap: 6px; background: none; border: 0; cursor: pointer; padding: 8px; }
-  .nav-toggle span { display: block; width: 26px; height: 1.5px; background: var(--color-ink); transition: 0.3s; }
-
-  @media (max-width: 820px) {
-    .nav-toggle { display: flex; }
-    .main-nav { position: static; }
-    .nav-list {
-      position: fixed; inset: 76px 0 auto 0; flex-direction: column; align-items: flex-start; gap: 0;
-      background: var(--color-paper); border-bottom: 1px solid var(--color-line);
-      max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 clamp(20px,5vw,64px);
-    }
-    .main-nav.open .nav-list { max-height: 80vh; padding-block: 14px; }
-    .nav-list > li { width: 100%; border-top: 1px solid var(--color-line); }
-    .nav-list > li:first-child { border-top: 0; }
-    .nav-link { display: block; padding: 16px 0; }
-    .submenu { position: static; opacity: 1; visibility: visible; transform: none; border: 0; box-shadow: none; min-width: 0; padding: 0 0 10px 16px; }
-  }
-</style>
-
-<script>
-  const header = document.getElementById("site-header");
-  const navEl = header?.querySelector<HTMLElement>(".main-nav");
-  const toggle = header?.querySelector<HTMLButtonElement>(".nav-toggle");
-  toggle?.addEventListener("click", () => {
-    const open = navEl!.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(open));
-  });
-  const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 10);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
-</script>

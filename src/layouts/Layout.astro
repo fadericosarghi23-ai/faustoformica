@@ -1,0 +1,31 @@
+---
+import '@fontsource-variable/open-sans';
+import '../styles/global.css';
+import '../styles/pages.css';
+import Head from '../components/Head.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  path?: string;
+  bare?: boolean;
+  ogType?: string;
+  ogImage?: string;
+}
+const { title, description, path = '', bare = false, ogType = 'website', ogImage } = Astro.props;
+---
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    <Head title={title} description={description} path={path} ogType={ogType} ogImage={ogImage} />
+  </head>
+  <body class={bare ? 'is-bare' : undefined}>
+    <a href="#main" class="skip-link">Vai al contenuto</a>
+    {!bare && <Header path={path} />}
+    <slot />
+    {!bare && <Footer />}
+    <script>import '../scripts/common.js';</script>
+  </body>
+</html>

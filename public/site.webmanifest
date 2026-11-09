@@ -1,0 +1,11 @@
+{
+  "name": "Architetto Fausto Formica",
+  "short_name": "Fausto Formica",
+  "description": "Architetto a Treviglio (BG)",
+  "lang": "it",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#0a0a0a",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

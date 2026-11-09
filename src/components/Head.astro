@@ -1,0 +1,75 @@
+---
+import { site } from '../data/site';
+interface Props {
+  title: string;
+  description?: string;
+  path?: string;
+  ogType?: string;
+  ogImage?: string;
+}
+const { title, description = site.description, path = '', ogType = 'website', ogImage = site.ogImage } = Astro.props;
+const canonical = new URL(path, site.url).href;
+const ogImageAbs = new URL(ogImage, site.url).href;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['ProfessionalService', 'LocalBusiness'],
+      '@id': `${site.url}/#studio`,
+      name: `Architetto ${site.name}`,
+      alternateName: ['Studio Formica', 'Architetto Fausto Formica'],
+      description: site.description,
+      url: `${site.url}/`,
+      email: site.email,
+      telephone: site.phones[0],
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: site.address.street,
+        postalCode: site.address.postalCode,
+        addressLocality: site.address.locality,
+        addressRegion: site.address.region,
+        addressCountry: site.address.country,
+      },
+      hasMap: site.maps,
+      areaServed: site.areaServed.map((a) => ({ '@type': 'AdministrativeArea', name: a })),
+      knowsAbout: ['Architettura', 'Urbanistica', 'Design di interni', 'Design industriale', 'Direzione lavori'],
+      sameAs: [site.linkedin],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#sito`,
+      url: `${site.url}/`,
+      name: `Architetto ${site.name}`,
+      inLanguage: 'it',
+      publisher: { '@id': `${site.url}/#studio` },
+    },
+  ],
+};
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="theme-color" content={site.themeColor} />
+<meta name="author" content={site.name} />
+<meta name="geo.region" content="IT-BG" />
+<meta name="geo.placename" content="Treviglio" />
+<meta property="og:type" content={ogType} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:site_name" content={`Architetto ${site.name}`} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageAbs} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageAbs} />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script is:inline>document.documentElement.classList.remove('no-js')</script>

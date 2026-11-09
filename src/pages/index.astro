@@ -1,213 +1,68 @@
 ---
-import Base from "../layouts/Base.astro";
-import { site } from "../config/site";
-import { designIndustriale, designInterni, architetturaUrbanistica } from "../data/projects";
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import { site, navItems } from '../data/site';
+import { projects } from '../data/projects';
+import { projectCover } from '../lib/images';
 
-const discipline = [
-  { href: "/design-industriale", title: "design industriale", sub: "progettazione e modellazione 3D", quote: "riconoscere il bisogno è la condizione primaria del design", author: "Charles Eames", img: designIndustriale[0].img },
-  { href: "/design-di-interni", title: "design di interni", sub: "abitazione e prodotto d'arredo", quote: "la casa dovrebbe raccontare la storia di chi sei, ed essere collezione di ciò che ami", author: "Nate Berkus", img: designInterni[5].img },
-  { href: "/architettura-e-urbanistica", title: "architettura e urbanistica", sub: "progettazione e direzione lavori", quote: "una sedia in una stanza, una stanza in una casa, una casa nell'ambiente, l'ambiente nel progetto di una città", author: "Eliel Saarinen", img: architetturaUrbanistica[3].img },
-];
+function titleCase(s: string) {
+  return s.split(' ').map((w) => (w.length > 2 ? w.charAt(0).toUpperCase() + w.slice(1) : w)).join(' ');
+}
 
-const works = [
-  architetturaUrbanistica[0], architetturaUrbanistica[4], designInterni[0], designInterni[1],
-  architetturaUrbanistica[5], designInterni[5], designIndustriale[0], architetturaUrbanistica[11],
-];
+// Progetti in evidenza in home (uno per varietà di categoria e materiale).
+const featuredSlugs = ['mauri', 'facile-sestu', 'di-cola', 'work-box', 'cash-42', 'palazzo', 'new-art', 'casati'];
+const featured = featuredSlugs
+  .map((s) => projects.find((p) => p.slug === s))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p))
+  .map((p) => ({ ...p, cover: projectCover(p.slug)! }));
 
-const stats = [
-  { n: "dal 1994", l: "attività professionale" },
-  { n: "39", l: "progetti realizzati" },
-  { n: "n. 2345", l: "Ordine Architetti Bergamo" },
-  { n: "Treviglio", l: "sede dello studio" },
-];
-
-const heroImg = architetturaUrbanistica[3].img;
+const year = new Date().getFullYear();
 ---
-<Base
-  title="Architettura | Treviglio | Architetto Fausto Formica"
-  description="Studio dell'Architetto Fausto Formica a Treviglio: architettura e urbanistica, design di interni, design industriale. Progettazione e direzione lavori."
->
-  <!-- HERO: split chiaro con grande sfera -->
-  <section class="hero wrap">
-    <div class="hero-text">
-      <p class="t-eyebrow" data-reveal>{site.tagline}</p>
-      <h1 class="hero-name" data-reveal>
-        <span>{site.wordmarkTop}</span><span>{site.wordmarkBottom}</span>
-      </h1>
-      <p class="hero-lead" data-reveal>
-        Architettura e urbanistica, design di interni e design industriale.
-        Progetti pensati sul bisogno reale di chi li vive.
-      </p>
-      <nav class="hero-disc" data-reveal>
-        <a href="/design-industriale">design industriale</a>
-        <a href="/design-di-interni">design di interni</a>
-        <a href="/architettura-e-urbanistica">architettura e urbanistica</a>
-      </nav>
-    </div>
-    <div class="hero-visual" data-reveal>
-      <span class="hero-sphere"><img src={heroImg} alt="Progetto di architettura" /></span>
-    </div>
-  </section>
+<Layout title={`Architetto a Treviglio | Fausto Formica`} description={site.description} path="/" bare={true} ogImage={featured[0]?.cover.src}>
+  <main id="main">
+    <h1 class="sr-only">Architetto Fausto Formica — Treviglio</h1>
+    <div class="ed">
+      <span class="glyph g-tr">Treviglio · Bergamo</span>
+      <a class="glyph g-bl" href={`mailto:${site.email}`}>{site.email}</a>
+      <span class="glyph g-br">© {year}</span>
 
-  <!-- NUMERI -->
-  <section class="stats wrap">
-    <div class="stats-grid" data-reveal-group>
-      {stats.map((s) => (
-        <div class="stat" data-reveal>
-          <span class="stat-n">{s.n}</span>
-          <span class="stat-l">{s.l}</span>
+      <div class="ed-left">
+        <a class="ed-brand" href="/" aria-label={`${site.name} — home`}>{site.brandLead} <strong>{site.brandStrong}</strong></a>
+        <nav class="ed-nav" aria-label="Principale">
+          {navItems.map((i) => <a class="link-underline" href={i.href}>{i.label}</a>)}
+        </nav>
+        <div class="ed-active" aria-live="polite">
+          {featured.map((p, idx) => (
+            <a class={`ed-active-item${idx === 0 ? ' is-active' : ''}`} data-item={idx} href={`/progetti/${p.slug}/`}>
+              <span class="ed-active-title">{p.title}</span>
+              <span class="ed-active-meta">{titleCase(p.descriptor)} · {p.year}</span>
+            </a>
+          ))}
         </div>
-      ))}
-    </div>
-    <p class="reg t-caption" data-reveal>{site.registration}</p>
-  </section>
-
-  <!-- DISCIPLINE: righe alternate con sfera + citazione -->
-  <section class="disc wrap">
-    <p class="t-eyebrow disc-eyebrow" data-reveal>Cosa facciamo</p>
-    {discipline.map((d, i) => (
-      <a class:list={["disc-row", { flip: i % 2 === 1 }]} href={d.href} data-reveal-group>
-        <div class="disc-visual" data-reveal>
-          <span class="disc-sphere"><img src={d.img} alt={d.title} loading="lazy" /></span>
-        </div>
-        <div class="disc-text" data-reveal>
-          <h2 class="disc-title">{d.title}</h2>
-          <p class="disc-sub">{d.sub}</p>
-          <blockquote class="disc-quote">«{d.quote}»</blockquote>
-          <cite class="disc-author">{d.author}</cite>
-          <span class="link-underline disc-link">Scopri i progetti</span>
-        </div>
-      </a>
-    ))}
-  </section>
-
-  <!-- GALLERIA progetti -->
-  <section class="works wrap">
-    <div class="works-head">
-      <div data-reveal>
-        <p class="t-eyebrow">Portfolio</p>
-        <h2 class="t-h1">Progetti selezionati</h2>
       </div>
-      <a class="link-underline" href="/architettura-e-urbanistica" data-reveal>Tutti i progetti</a>
+
+      <div class="ed-center">
+        <p class="ed-intro">{site.description}</p>
+        <div class="ed-stage">
+          {featured.map((p, idx) => (
+            <a class={`ed-shot${idx === 0 ? ' is-active' : ''}`} data-shot={idx} href={`/progetti/${p.slug}/`} aria-label={p.title} aria-hidden={idx === 0 ? undefined : 'true'} tabindex={idx === 0 ? undefined : -1}>
+              <Image src={p.cover} alt={p.title} widths={[480, 900]} sizes="(min-width:900px) 52vw, 92vw" loading={idx === 0 ? 'eager' : 'lazy'} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <ul class="ed-index" aria-label="Lavori">
+        {featured.map((p, idx) => (
+          <li>
+            <button type="button" class={`ed-thumb${idx === 0 ? ' is-active' : ''}`} data-thumb={idx} aria-label={p.title}>
+              <Image src={p.cover} alt={p.title} widths={[80, 160]} sizes="78px" loading="lazy" />
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
-    <div class="works-grid" data-reveal-group>
-      {works.map((p) => {
-        const meta = [p.luogo, p.anno].filter(Boolean).join(" · ");
-        return (
-          <a class="work" href="/architettura-e-urbanistica" data-reveal aria-label={p.title}>
-            <span class="work-sphere"><img src={p.img} alt={p.title} loading="lazy" /></span>
-            <span class="work-title">{p.title}</span>
-            <span class="work-meta">{meta}</span>
-          </a>
-        );
-      })}
-    </div>
-  </section>
+  </main>
 
-  <!-- STUDIO -->
-  <section class="studio wrap">
-    <div class="studio-portrait" data-reveal><img src="/images/profilo.png" alt="Architetto Fausto Formica" loading="lazy" /></div>
-    <div class="studio-body">
-      <p class="t-eyebrow" data-reveal>Lo studio</p>
-      <h2 class="t-h1" data-reveal>Formazione ed esperienze</h2>
-      <p class="t-lead" data-reveal>
-        Laureato al Politecnico di Milano e iscritto all'Ordine degli Architetti di Bergamo,
-        dal 1994 sviluppa progetti tra architettura, urbanistica, interni e industrial design,
-        seguendo l'intero processo dallo studio di fattibilità alla direzione dei lavori, con
-        esperienza anche in ambito internazionale.
-      </p>
-      <a class="btn" href="/profilo" data-reveal>Il profilo completo</a>
-    </div>
-  </section>
-
-  <!-- CONTATTI -->
-  <section class="home-contact wrap">
-    <hr class="rule" />
-    <div class="hc-inner">
-      <p class="hc-lead" data-reveal>Parliamo del tuo progetto.</p>
-      <p class="hc-info" data-reveal>{site.addressStudio} · <a href={`mailto:${site.email}`}>{site.email}</a></p>
-      <a class="btn" href="/contatti" data-reveal>Contatti</a>
-    </div>
-  </section>
-</Base>
-
-<style>
-  /* HERO */
-  .hero { padding-top: clamp(40px, 7vw, 90px); display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px,5vw,80px); align-items: center; }
-  .hero-name { display: flex; flex-direction: column; line-height: 0.98; margin: 20px 0 0; }
-  .hero-name span:first-child { font-size: clamp(2rem, 5vw, 3.6rem); color: var(--color-muted); }
-  .hero-name span:last-child { font-size: clamp(2.4rem, 6.4vw, 4.6rem); letter-spacing: -0.02em; }
-  .hero-lead { font-size: clamp(1.02rem,1.5vw,1.2rem); color: var(--color-muted); line-height: 1.6; margin: 26px 0 0; max-width: 42ch; }
-  .hero-disc { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 28px; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.14em; }
-  .hero-disc a { color: var(--color-muted); transition: color 0.25s; }
-  .hero-disc a:hover { color: var(--color-ink); }
-  .hero-visual { display: flex; justify-content: center; }
-  .hero-sphere { display: block; width: clamp(260px, 36vw, 440px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--color-surface); box-shadow: 0 24px 60px rgba(20,20,20,0.12); }
-  .hero-sphere img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
-  .hero-sphere:hover img { transform: scale(1.05); }
-
-  /* STATS */
-  .stats { padding-top: clamp(60px,9vw,120px); }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; border-top: 1px solid var(--color-line); border-bottom: 1px solid var(--color-line); padding: clamp(28px,4vw,44px) 0; }
-  .stat { display: flex; flex-direction: column; gap: 8px; }
-  .stat-n { font-size: clamp(1.5rem,2.6vw,2.1rem); color: var(--color-ink); }
-  .stat-l { font-size: 0.78rem; color: var(--color-faint); text-transform: uppercase; letter-spacing: 0.1em; }
-  .reg { margin: 22px 0 0; max-width: 720px; }
-
-  /* DISCIPLINE */
-  .disc { padding-top: clamp(70px,10vw,140px); }
-  .disc-eyebrow { margin-bottom: clamp(30px,4vw,50px); }
-  .disc-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px,5vw,80px); align-items: center; padding: clamp(28px,4vw,52px) 0; }
-  .disc-row.flip .disc-visual { order: 2; }
-  .disc-visual { display: flex; justify-content: center; }
-  .disc-sphere { display: block; width: clamp(200px, 26vw, 320px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--color-surface); box-shadow: 0 16px 44px rgba(20,20,20,0.1); }
-  .disc-sphere img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
-  .disc-row:hover .disc-sphere img { transform: scale(1.06); }
-  .disc-title { font-size: clamp(1.6rem,3vw,2.3rem); text-transform: lowercase; }
-  .disc-sub { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-faint); margin: 10px 0 20px; }
-  .disc-quote { font-size: 1.1rem; font-style: italic; color: var(--color-ink); line-height: 1.5; margin: 0; }
-  .disc-author { display: block; margin: 10px 0 0; font-size: 0.8rem; color: var(--color-faint); }
-  .disc-link { display: inline-block; margin-top: 22px; }
-
-  /* WORKS */
-  .works { padding-top: clamp(80px,11vw,150px); }
-  .works-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 52px; }
-  .works-head .t-h1 { margin-top: 8px; }
-  .works-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(28px,4vw,48px) clamp(20px,3vw,36px); justify-items: center; }
-  .work { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
-  .work-sphere { width: 100%; max-width: 220px; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--color-surface); box-shadow: 0 10px 30px rgba(20,20,20,0.08); transition: box-shadow 0.5s ease; }
-  .work-sphere img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s cubic-bezier(.2,.7,.2,1); }
-  .work:hover .work-sphere { box-shadow: 0 18px 44px rgba(20,20,20,0.14); }
-  .work:hover .work-sphere img { transform: scale(1.07); }
-  .work-title { font-size: 0.95rem; color: var(--color-ink); text-transform: lowercase; }
-  .work-meta { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-faint); margin-top: -6px; }
-
-  /* STUDIO */
-  .studio { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(32px,5vw,72px); align-items: center; padding-top: clamp(80px,11vw,150px); }
-  .studio-portrait { aspect-ratio: 4/5; overflow: hidden; background: var(--color-surface); box-shadow: 0 20px 50px rgba(20,20,20,0.1); }
-  .studio-portrait img { width: 100%; height: 100%; object-fit: cover; }
-  .studio-body .t-h1 { margin: 10px 0 20px; }
-  .studio-body .btn { margin-top: 28px; }
-
-  /* CONTATTI */
-  .home-contact { padding-top: clamp(80px,11vw,150px); }
-  .hc-inner { padding-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
-  .hc-lead { font-size: clamp(1.8rem,3.4vw,2.6rem); font-weight: 300; margin: 0; }
-  .hc-info { font-size: 0.98rem; color: var(--color-muted); margin: 0; }
-  .hc-info a { color: var(--color-ink); }
-  .hc-inner .btn { margin-top: 10px; }
-
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-visual { order: -1; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 24px; }
-    .works-grid { grid-template-columns: repeat(3, 1fr); }
-    .studio { grid-template-columns: 1fr; }
-    .studio-portrait { max-width: 420px; }
-  }
-  @media (max-width: 620px) {
-    .disc-row, .disc-row.flip .disc-visual { grid-template-columns: 1fr; order: 0; }
-    .disc-row { text-align: center; justify-items: center; }
-    .works-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-</style>
+  <script>import '../scripts/home.js';</script>
+</Layout>

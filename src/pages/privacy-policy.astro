@@ -1,65 +1,27 @@
 ---
-import Base from "../layouts/Base.astro";
-import { site } from "../config/site";
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
 ---
-<Base title="Privacy Policy | Architetto Fausto Formica" description="Informativa sul trattamento dei dati personali ai sensi del Regolamento UE 2016/679.">
-  <article class="legal wrap wrap-narrow" data-reveal-group>
-    <h1 data-reveal>Privacy Policy</h1>
-    <p class="legal-intro" data-reveal>
-      {site.companyName}, con sede legale in {site.addressLegal}, si impegna a tutelare la privacy
-      online dei propri utenti. La presente informativa è redatta ai sensi dell'art. 13 del
-      Regolamento UE 2016/679 (GDPR).
-    </p>
+<Layout title="Privacy policy | Architetto Fausto Formica" description="Informativa sul trattamento dei dati personali del sito dell’architetto Fausto Formica." path="/privacy-policy/">
+  <div class="container page-head">
+    <h1>Privacy policy</h1>
+  </div>
+  <div class="container prose" style="margin-top:1.5rem;padding-bottom:4rem">
+    <p>La presente informativa è resa ai sensi del Regolamento (UE) 2016/679 (GDPR) a chi consulta questo sito.</p>
 
-    <h2 data-reveal>Titolare del trattamento</h2>
-    <p data-reveal>
-      Titolare del trattamento è {site.companyName}, {site.addressLegal}.
-      Per ogni richiesta relativa ai dati personali è possibile scrivere a
-      <a href={`mailto:${site.email}`}>{site.email}</a>.
-    </p>
+    <h2>Titolare del trattamento</h2>
+    <p>Arch. {site.name} — {site.address.street}, {site.address.postalCode} {site.address.locality} ({site.address.region}).<br />
+      E-mail: <a href={`mailto:${site.email}`}>{site.email}</a> · P.IVA DA COMPILARE.</p>
 
-    <h2 data-reveal>Dati raccolti e finalità</h2>
-    <p data-reveal>
-      Vengono trattati i dati identificativi forniti dall'utente (es. nome e cognome, ragione sociale
-      e partita IVA, codice fiscale, indirizzo, e-mail, numero di telefono) e i dati raccolti durante
-      la navigazione. Le finalità comprendono la richiesta di informazioni e assistenza, l'invio di
-      comunicazioni e newsletter e l'erogazione dei servizi richiesti.
-    </p>
+    <h2>Dati trattati</h2>
+    <p>Il sito è di tipo informativo e non prevede moduli di raccolta dati. Vengono trattati i soli dati di navigazione tecnici necessari al funzionamento del sito e gli eventuali dati che l’utente comunica volontariamente contattando lo studio via e-mail o telefono.</p>
 
-    <h2 data-reveal>Base giuridica e conservazione</h2>
-    <p data-reveal>
-      Il trattamento si fonda sul consenso dell'interessato, sull'esecuzione di un contratto e sul
-      legittimo interesse del Titolare (art. 6 GDPR). I dati sono conservati per il tempo necessario
-      alle finalità indicate e trattati presso la sede del Titolare dal personale incaricato.
-    </p>
+    <h2>Finalità</h2>
+    <p>I dati comunicati volontariamente sono utilizzati esclusivamente per rispondere alle richieste ricevute e non vengono diffusi a terzi.</p>
 
-    <h2 data-reveal>Comunicazione e servizi terzi</h2>
-    <p data-reveal>
-      I dati non sono diffusi e sono comunicati a terzi solo quando strettamente necessario
-      all'erogazione del servizio. Per l'invio di newsletter e comunicazioni è utilizzato il servizio
-      Mailgun, Inc.
-    </p>
+    <h2>Diritti dell’interessato</h2>
+    <p>L’interessato può esercitare in ogni momento i diritti previsti dagli artt. 15-22 del GDPR (accesso, rettifica, cancellazione, limitazione, opposizione) scrivendo a <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
 
-    <h2 data-reveal>Diritti dell'interessato</h2>
-    <p data-reveal>
-      L'interessato può esercitare i diritti previsti dagli artt. 15-22 del GDPR (accesso, rettifica,
-      cancellazione, limitazione, portabilità e opposizione) scrivendo al Titolare all'indirizzo
-      <a href={`mailto:${site.email}`}>{site.email}</a>.
-    </p>
-
-    <p class="legal-note" data-reveal>
-      Testo di sintesi ricostruito dall'informativa del sito originale: far verificare da un consulente
-      legale e integrare con eventuali registri cookie e dati del DPO prima della pubblicazione.
-    </p>
-  </article>
-</Base>
-
-<style>
-  .legal { padding-top: 70px; max-width: 760px; }
-  .legal h1 { font-size: var(--text-section); font-weight: 300; margin: 0 0 24px; }
-  .legal h2 { font-size: var(--text-sub); font-weight: 400; margin: 36px 0 12px; }
-  .legal p { font-size: var(--text-body); color: var(--color-muted); line-height: 1.7; margin: 0 0 14px; }
-  .legal a { color: var(--color-accent); }
-  .legal-intro { color: var(--color-ink); }
-  .legal-note { margin-top: 40px; font-size: var(--text-caption); color: var(--color-faint); font-style: italic; }
-</style>
+    <p class="muted mt-4" style="font-size:.85rem">Testo di base da integrare con i dati legali completi dello studio prima della pubblicazione.</p>
+  </div>
+</Layout>

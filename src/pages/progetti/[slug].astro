@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/projects';
+import { projectImages } from '../../lib/images';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const imgs = projectImages(project.slug);
+
+function titleCase(s: string) {
+  return s
+    .split(' ')
+    .map((w) => (w.length > 2 ? w.charAt(0).toUpperCase() + w.slice(1) : w))
+    .join(' ');
+}
+const descriptor = titleCase(project.descriptor);
+
+// Due colonne a scorrimento (effetto della base) quando ci sono abbastanza immagini.
+const single = imgs.length < 4;
+const colA = single ? imgs : imgs.filter((_, i) => i % 2 === 0);
+const colB = single ? [] : imgs.filter((_, i) => i % 2 === 1);
+const title = `${project.title} | Architetto Fausto Formica`;
+---
+<Layout title={title} description={project.description || descriptor} path={`/progetti/${project.slug}/`} ogType="article">
+  <article class="container project-wrap">
+    <div class="project-layout">
+      <header class="project-head reveal">
+        <h1>{project.title}</h1>
+        <p class="place-year">{descriptor} · {project.year}</p>
+        <div class="project-meta">
+          <span><b>Categoria:</b> {project.category}</span>
+          <span><b>Committente:</b> {project.client}</span>
+          {project.size && project.size !== 'nd' && <span><b>Consistenza:</b> {project.size}</span>}
+          <span><b>Anno:</b> {project.year}</span>
+        </div>
+        {project.description && <p class="project-desc">{project.description}</p>}
+        <a class="project-back" href="/progetti/">← Torna ai progetti</a>
+      </header>
+
+      <div class={`project-cols${single ? ' single' : ''}`}>
+        <section class="project-col reveal">
+          <div class="pcol-imgs">
+            {colA.map((img, i) => (
+              <figure>
+                <button type="button" data-full={img.src} data-alt={`${project.title} — immagine ${i + 1}`} aria-label="Ingrandisci immagine">
+                  <Image src={img} alt={`${project.title} — immagine ${i + 1}`} widths={[480, 900, 1500]} sizes="(min-width:900px) 40vw, 100vw" loading={i === 0 ? 'eager' : 'lazy'} />
+                </button>
+              </figure>
+            ))}
+          </div>
+        </section>
+        {!single && (
+          <section class="project-col reveal">
+            <div class="pcol-imgs">
+              {colB.map((img, i) => (
+                <figure>
+                  <button type="button" data-full={img.src} data-alt={`${project.title} — immagine ${i + 1}`} aria-label="Ingrandisci immagine">
+                    <Image src={img} alt={`${project.title} — immagine ${i + 1}`} widths={[480, 900, 1500]} sizes="(min-width:900px) 40vw, 100vw" loading="lazy" />
+                  </button>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  </article>
+
+  <div class="lightbox" data-lb aria-hidden="true">
+    <button type="button" class="close" data-lb-close aria-label="Chiudi">×</button>
+    <img data-lb-img alt="" />
+  </div>
+
+  <script>import '../../scripts/lightbox.js';</script>
+</Layout>

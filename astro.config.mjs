@@ -1,13 +1,10 @@
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
-const SITE_URL = 'https://architettofaustoformica.it';
-
+// Canonical domain of the live studio site; used for sitemap and absolute URLs.
 export default defineConfig({
-  site: SITE_URL,
+  site: 'https://architettofaustoformica.it',
+  trailingSlash: 'always',
   integrations: [sitemap()],
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  build: { format: 'directory' },
 });
